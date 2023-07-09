@@ -1,7 +1,46 @@
+async function editMemo(event) {
+  const id = event.target.dataset.id;
+  const editInput = prompt("수정할 값을 입력하세요");
+  // fetch 파람값을 보내거나 받을 때 백틱(`)으로 감싸주어야한다.
+  const res = await fetch(`memos/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      id,
+      title: editInput,
+    }),
+  });
+  readMemo();
+}
+
+async function deleteMemo(event) {
+  const id = event.target.dataset.id;
+  const res = await fetch(`memos/${id}`, {
+    method: "DELETE",
+  });
+
+  readMemo();
+}
+
 function displayMemo(memo) {
   const ul = document.querySelector("#memo-ul");
   const li = document.createElement("li");
-  li.innerText = `[id:${memo.id}] ${memo.content}`;
+  li.innerText = `[id:${memo.id}] ${memo.title} ${memo.createAt}`;
+
+  const editBtn = document.createElement("button");
+  editBtn.innerText = "수정하기";
+  editBtn.addEventListener("click", editMemo);
+  editBtn.dataset.id = memo.id;
+
+  const delBtn = document.createElement("button");
+  delBtn.innerText = "삭제";
+  delBtn.dataset.id = memo.id;
+  delBtn.addEventListener("click", deleteMemo);
+
+  li.appendChild(editBtn);
+  li.appendChild(delBtn);
   ul.appendChild(li);
 }
 
@@ -15,6 +54,7 @@ async function readMemo() {
 }
 
 async function createMemo(value) {
+  let getDate = new Date();
   const res = await fetch("/memos", {
     method: "POST",
     headers: {
@@ -22,7 +62,8 @@ async function createMemo(value) {
     },
     body: JSON.stringify({
       id: new Date().getTime(),
-      content: value,
+      title: value,
+      createAt: new Date(),
     }),
   });
   readMemo();
