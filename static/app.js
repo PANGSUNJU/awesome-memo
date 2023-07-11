@@ -8,7 +8,7 @@ async function editMemo(event) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      id,
+      id: id,
       title: editInput,
     }),
   });
@@ -54,16 +54,24 @@ async function readMemo() {
 }
 
 async function createMemo(value) {
-  let getDate = new Date();
+  let createTime = new Date();
+  let mouth = createTime.getMonth();
+  let day = createTime.getDay();
+  let h = createTime.getHours();
+  let m = createTime.getMinutes();
+  let s = createTime.getSeconds();
+  
+  let CreateAt = ` ${mouth}/${day} ${h}:${m}:${s}`
+  let id = `${createTime.getTime()}`
   const res = await fetch("/memos", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      id: new Date().getTime(),
+      id: id,
       title: value,
-      createAt: new Date(),
+      createAt: CreateAt,
     }),
   });
   readMemo();

@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from typing_extensions import Annotated, List
+from typing_extensions import Annotated
 
 
 class Memo(BaseModel):
@@ -21,13 +21,6 @@ app = FastAPI()
 def create_memo(memo: Memo):
     memos.append(memo)
     return '200'
-
-
-@app.post("/memos")
-def create_memo(memo: Memo):
-    memos.append(memo)
-    return '메모 추가에 성공했습니다.'
-
 
 @app.get("/memos")
 def read_memo():
@@ -50,6 +43,9 @@ def read_memo(sort_by: str, sort_order: str):
 def put_memo(req_memo: Memo):
     for memo in memos:
         if memo.id == req_memo.id:
+            print(memo.id)
+            print(req_memo.id)
+            
             memo.title = req_memo.title
             return '성공했습니다.'
     return '해당id는 없습니다.'
