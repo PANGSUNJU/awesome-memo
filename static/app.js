@@ -10,6 +10,7 @@ async function editMemo(event) {
     body: JSON.stringify({
       id: id,
       title: editInput,
+      createAt:'',
     }),
   });
   readMemo();
