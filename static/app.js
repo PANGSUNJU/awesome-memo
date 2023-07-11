@@ -54,16 +54,15 @@ async function readMemo() {
 }
 
 async function createMemo(value) {
-  let getDate = new Date();
   const res = await fetch("/memos", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      id: new Date().getTime(),
+      id: 230709,
       title: value,
-      createAt: new Date(),
+      createAt: 230709,
     }),
   });
   readMemo();
@@ -75,6 +74,7 @@ function handleSubmit(event) {
   createMemo(input.value);
   input.value = "";
 }
+
 const form = document.querySelector("#memo-form");
 form.addEventListener("submit", handleSubmit);
 
